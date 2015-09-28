@@ -16,7 +16,7 @@ public:
 		return std::chrono::duration_cast<Duration>(Clock::now() - start_);
 	}
 private:
-	std::chrono::time_point<Clock> start_{Clock::now()};
+	std::chrono::time_point<Clock> const start_{Clock::now()};
 };
 
 using tic = basic_tic<std::chrono::high_resolution_clock>;
