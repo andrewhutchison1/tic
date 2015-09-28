@@ -3,22 +3,20 @@
 
 #include <chrono>
 
-template <typename Clock = std::chrono::high_resolution_clock>
+template <
+	typename Clock = std::chrono::high_resolution_clock,
+	typename DefaultDuration = std::chrono::milliseconds>
 //	requires TrivialClock<Clock>
 class basic_tic
 {
 public:
-	basic_tic() noexcept
-		: start_{Clock::now()}
-	{ /* Nothing */ }
-
-	template <typename Duration = std::chrono::milliseconds>
+	template <typename Duration = DefaultDuration>
 	auto toc() const noexcept -> Duration
 	{
 		return std::chrono::duration_cast<Duration>(Clock::now() - start_);
 	}
 private:
-	std::chrono::time_point<Clock> start_;
+	std::chrono::time_point<Clock> start_{Clock::now()};
 };
 
 using tic = basic_tic<std::chrono::high_resolution_clock>;
