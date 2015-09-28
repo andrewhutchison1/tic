@@ -8,7 +8,7 @@ under `-std=c++11` as well as `-std=c++14`.
 To time a region of code, construct a named `tic` at the desired start
 position and call the `toc` method to get the duration.
 
-```
+```cpp
 // Timing a region of code
 auto timer = tic{};
 // ...
@@ -25,7 +25,7 @@ clock. In fact, `tic` is an alias of the unparameterised template
 `basic_tic<Clock>`. You can make an alias of `basic_tic` to any type that
 satisfies `TrivialClock`.
 
-```
+```cpp
 // Using a different clock
 using steady_tic = basic_tic<std::chrono::steady_clock>; // Monotonic clock
 auto timer = steady_tic{};
@@ -42,7 +42,7 @@ related ways.
 1. Explicitly parameterize the call to `toc`
 2. Alias `basic_tic` with a `DefaultDuration` parameter
 
-```
+```cpp
 // 1. Explicitly parameterize the call the toc
 auto timer = tic{}; // Uses the default clock
 // ...
