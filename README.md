@@ -17,6 +17,8 @@ auto timer = tic{};
 auto dur = timer.toc(); // dur is std::chrono::milliseconds
 ```
 
+`toc` does not reset the timer.
+
 ### Using a different clock
 `tic` uses `std::chrono::high_resolution_clock` as its default
 clock. In fact, `tic` is an alias of the unparameterised template
