@@ -1,38 +1,58 @@
 # Tic
 A tiny, lightweight implementation of MATLAB-style differential duration
-timing in clean C++14. To install, simply put `tic.hpp` in your project
-directory or on your compiler's include path.
+timing in clean C++14. To install, simply `#include "tic.hpp"`. Compiles
+under `-std=c++11` as well as `-std=c++14`.
 
-### Usage
-To start a timer, simply construct a named `tic`. Call `toc` on it to get
-a `std::chrono::duration` object that represents the elapsed time.
+## Usage
+### Timing a region of code
+To time a region of code, construct a named `tic` at the desired start
+position and call the `toc` method to get the duration.
 
 ```
+// Timing a region of code
 auto timer = tic{};
 // ...
-// Do some stuff you want to time
+// Some stuff that we want to time
 // ...
-auto duration = timer.toc(); // duration stores the elapsed time
+auto dur = timer.toc(); // dur is std::chrono::milliseconds
 ```
 
-You can parameterize the timer based on the type of clock you want to use;
-alias `basic_tic` with a type satisfying `TrivialClock` to achieve this.
-`tic` is an alias for `basic_tic<std::chrono::high_resolution_clock>`.
-The member function `toc` is parameterised by a duration type, the default
-is `std::chrono::milliseconds`.
+### Using a different clock
+`tic` uses `std::chrono::high_resolution_clock` as its default
+clock. In fact, `tic` is an alias of the unparameterised template
+`basic_tic<Clock>`. You can make an alias of `basic_tic` to any type that
+satisfies `TrivialClock`.
 
 ```
-auto timer = basic_tic<std::chrono::steady_clock>; // Use a monotonic clock
+// Using a different clock
+using steady_tic = basic_tic<std::chrono::steady_clock>; // Monotonic clock
+auto timer = steady_tic{};
 // ...
-auto duration = timer.toc<std::chrono::seconds>(); // Elapsed seconds
+auto dur = timer.toc(); // dur is std::chrono::milliseconds
 ```
 
-`toc` does not reset the timer:
+### Controlling the duration returned by `toc`
+`tic` uses `std::chrono::milliseconds` as the default duration type
+returned by `toc`. To avoid having to perform a `duration_cast` after
+calling `toc`, you can control the duration returned by `toc` in two
+related ways.
+
+1. Explicitly parameterize the call to `toc`
+2. Alias `basic_tic` with a `DefaultDuration` parameter
 
 ```
-auto timer = tic{};
-std::this_thread::sleep_for(1s);
-auto dur1 = timer.toc(); // dur1 ~= 1000 ms
-std::this_thread::sleep_for(1s);
-auto dur2 = timer.toc(); // dur2 ~= 2000 ms
+// 1. Explicitly parameterize the call the toc
+auto timer = tic{}; // Uses the default clock
+// ...
+auto dur = timer.toc<std::chrono::seconds>(); // dur is std::chrono::seconds
+
+// 2. Alias basic_tic with a DefaultDuration parameter
+using tic_s = basic_tic<
+	std::chrono::high_resolution_clock,
+	std::chrono::seconds>;
+auto timer = tic_s{};
+// ...
+auto dur = timer.toc(); // dur is std::chrono::seconds
+// But you can still explicitly request a different duration
+auto dur2 = timer.toc<std::chrono::hours>(); // dur is std::chrono::hours
 ```
