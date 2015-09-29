@@ -10,13 +10,16 @@ template <
 class basic_tic
 {
 public:
+	using clock_type = Clock;
+	
 	template <typename Duration = DefaultDuration>
 	auto toc() const noexcept -> Duration
 	{
-		return std::chrono::duration_cast<Duration>(Clock::now() - start_);
+		auto const delta = clock_type::now() - start_;
+		return std::chrono::duration_cast<Duration>(delta);
 	}
 private:
-	std::chrono::time_point<Clock> const start_{Clock::now()};
+	std::chrono::time_point<clock_type> const start_{clock_type::now()};
 };
 
 using tic = basic_tic<std::chrono::high_resolution_clock>;
