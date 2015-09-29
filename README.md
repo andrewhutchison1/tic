@@ -14,7 +14,7 @@ auto timer = tic{};
 // ...
 // Some stuff that we want to time
 // ...
-auto dur = timer.toc(); // dur is std::chrono::milliseconds
+auto dur = timer.toc(); // dur is std::chrono::microseconds
 ```
 
 `toc` does not reset the timer.
@@ -30,11 +30,11 @@ satisfies `TrivialClock`.
 using steady_tic = basic_tic<std::chrono::steady_clock>; // Monotonic clock
 auto timer = steady_tic{};
 // ...
-auto dur = timer.toc(); // dur is std::chrono::milliseconds
+auto dur = timer.toc(); // dur is std::chrono::microseconds
 ```
 
 ### Controlling the duration returned by `toc`
-`tic` uses `std::chrono::milliseconds` as the default duration type
+`tic` uses `std::chrono::microseconds` as the default duration type
 returned by `toc`. To avoid having to perform a `duration_cast` after
 calling `toc`, you can control the duration returned by `toc` in two
 related ways.

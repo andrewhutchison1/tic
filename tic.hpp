@@ -5,7 +5,7 @@
 
 template <
 	typename Clock = std::chrono::high_resolution_clock,
-	typename DefaultDuration = std::chrono::milliseconds>
+	typename DefaultDuration = std::chrono::microseconds>
 //	requires TrivialClock<Clock>
 class basic_tic
 {
