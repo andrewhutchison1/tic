@@ -1,7 +1,9 @@
-#ifndef TIC_HPP_
-#define TIC_HPP_
+#ifndef AH1_TIC_HPP_
+#define AH1_TIC_HPP_
 
 #include <chrono>
+
+namespace ah1 {
 
 template <
 	typename Clock = std::chrono::high_resolution_clock,
@@ -11,7 +13,7 @@ class basic_tic
 {
 public:
 	using clock_type = Clock;
-	
+
 	template <typename Duration = DefaultDuration>
 	auto toc() const noexcept -> Duration
 	{
@@ -24,4 +26,6 @@ private:
 
 using tic = basic_tic<std::chrono::high_resolution_clock>;
 
-#endif // TIC_HPP_
+} // namespace ah1
+
+#endif // AH1_TIC_HPP_
